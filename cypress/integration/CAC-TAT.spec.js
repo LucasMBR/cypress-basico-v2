@@ -29,6 +29,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.get('.success').should('not.be.visible')
 
     })
+    
     it('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', function(){
 
         cy.clock()
@@ -65,6 +66,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.tick(THREE_SECONDS_IN_MS)
         cy.get('.error').should('not.be.visible')
     })
+
     it('preenche e limpa os campos nome, sobrenome, email e telefone',function(){
         cy.get('#firstName')
           .type('Lucas')
@@ -87,11 +89,13 @@ describe('Central de Atendimento ao Cliente TAT', function() {
           .clear()
           .should('have.value','')
     })
+
     it('exibe mensagem de erro ao submeter o formulário sem preencher os campos obrigatórios', function(){
       cy.clock()
       cy.contains('button', 'Enviar').click()
       cy.get('.error').should('be.visible')
     })
+
     it('envia o formuário com sucesso usando um comando customizado', function(){
       cy.clock()
       cy.fillMandatoryFieldsAndSubmit()
@@ -99,26 +103,31 @@ describe('Central de Atendimento ao Cliente TAT', function() {
       cy.tick(THREE_SECONDS_IN_MS)
       cy.get('.success').should('not.be.visible')
     })
+
     it('seleciona um produto (YouTube) por seu texto', function(){
       cy.get('#product')
       .select('YouTube')
       .should('have.value','youtube')
     })
+
     it('seleciona um produto (Mentoria) por seu valor (value)',function(){
       cy.get('#product')
       .select('mentoria')
       .should('have.value', 'mentoria')
     })
+
     it('seleciona um produto (Blog) por seu índice',function(){
       cy.get('#product')
       .select(1)
       .should('have.value', 'blog')
     })
+
     it('marca o tipo de atendimento "Feedback"',function(){
       cy.get('input[type="radio"][value="feedback"]')
       .check()
       .should('have.value','feedback')
     })
+
     //selecionar todos os campos e fazer verificações de cada
     it('marca cada tipo de atendimento',function(){
       cy.get('input[type="radio"]')
@@ -128,6 +137,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.wrap($radio).should('be.checked')
       })
     })
+
     it('marca ambos checkboxes, depois desmarca o último',function(){
       cy.get('input[type="checkbox"]')
       .check()
@@ -136,6 +146,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
       .uncheck()
       .should('not.be.checked')
     })
+
     //seleciona um arquivo e verifica se foi realmente adicionado. 
     it('seleciona um arquivo da pasta fixtures',function(){
       cy.get('input[type="file"]')
@@ -145,14 +156,17 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         expect($input[0].files[0].name).to.equal('example.json')
       })
     })
+
     it('seleciona um arquivo simulando um drag-and-drop',function(){
       cy.get('input[type="file"]')
       .should('not.have.value')
-      .selectFile('cypress/fixtures/example.json', {action:'drag-drop'})
+      .selectFile('./cypress/fixtures/example.json', {action:'drag-drop'})
       .should(function($input){
         expect($input[0].files[0].name).to.equal('example.json')
       })
     })
+
+    
     it('seleciona um arquivo utilizando uma fixture para a qual foi dada um alias',function(){
       cy.fixture('example.json').as('sampleFile')
       cy.get('input[type="file"]')
@@ -161,15 +175,18 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         expect($input[0].files[0].name).to.equal('example.json')
       })
     })
+
     it('verifica que a política de privacidade abre em outra aba sem a necessidade de um clique', function(){
       cy.get('#privacy a').should('have.attr', 'target', '_blank')
     })
+
     it('acessa a página da política de privacidade removendo o target e então clicando no link', function(){
       cy.get('#privacy a')
       .invoke('removeAttr', 'target')
       .click()
       cy.contains('Talking About Testing').should('be.visible')
     })
+
     it('exibe e esconde as mensagens de sucesso e erro usando o .invoke', () => {
       cy.get('.success')
         .should('not.be.visible')
@@ -186,6 +203,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         .invoke('hide')
         .should('not.be.visible')
     })
+
     it('preenche a area de texto usando o comando invoke',function(){
       const longText = Cypress._.repeat('0123456789',20)
 
@@ -193,6 +211,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
       .invoke('val',longText)
       .should('have.value', longText)
     })
+
     it('faz uma requisição HTTP', function(){
       cy.request('https://cac-tat.s3.eu-central-1.amazonaws.com/index.html')
       .should(function(response){
@@ -202,7 +221,8 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         expect(body).to.include('CAC TAT')
       })
     })
-    it.only('encontra o gato escondido', function(){
+
+    it('encontra o gato escondido', function(){
       cy.get('#cat')
       .invoke('show')
       .should('be.visible')
